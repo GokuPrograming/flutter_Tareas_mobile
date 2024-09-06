@@ -1,0 +1,64 @@
+Widget imagePerfil(BuildContext context) {
+  return Positioned(
+    top: MediaQuery.of(context).size.height * .13,
+    left: MediaQuery.of(context).size.width * .02,
+    child: Container(
+      margin: const EdgeInsets.symmetric(),
+      width: MediaQuery.of(context).size.width *
+          0.3, // Un 40% del ancho de la pantalla
+      height: MediaQuery.of(context).size.width * 0.3, // Mismo tamaño en altura
+      decoration: BoxDecoration(
+          color: const Color.fromARGB(208, 229, 78, 78),
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(200),
+          image: const DecorationImage(
+              alignment: Alignment.center,
+              fit: BoxFit.cover,
+              image: NetworkImage(
+                  'https://th.bing.com/th/id/R.3006eafd1ba61bdb42115de966386861?rik=CuowNsl6n0wx4w&riu=http%3a%2f%2f1.bp.blogspot.com%2f-oX2GXkpStV8%2fUVxK0atJKMI%2fAAAAAAAAAhA%2fWaUEpv0X30g%2fs1600%2fleon-sentado-dia-de-noche.jpg&ehk=ua5uV5AQhriJCtahGgcbAj9sGfJ3RqaQgvhkALHsFFY%3d&risl=&pid=ImgRaw&r=0'))),
+    ),
+  );
+}
+
+Widget portada(BuildContext context) {
+  return Positioned(
+    top: MediaQuery.of(context).size.height * .0000001,
+    child: Container(
+      width: MediaQuery.of(context).size.width,
+      height: 200,
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(200, 222, 78, 88),
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(
+              'https://th.bing.com/th/id/R.69774b6c6ce3dc5b852ad775f65addb8?rik=Lav2pyYt2VUXcg&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2f6%2ff%2f9%2f1283313-epic-halo-wallpaper-1920x1200-macbook.jpg&ehk=9Jj8tvV0xYM4q94bo9wRdjFWBTBfFb%2bAwL%2bJdUM75HQ%3d&risl=&pid=ImgRaw&r=0'),
+        ),
+      ),
+    ),
+  );
+}
+//Imagen perfil
+
+Widget descripcionPerfil(BuildContext context) {
+  double screenHeight = MediaQuery.of(context).size.height;
+  return Positioned(
+    top: screenHeight * 0.3, // 30% desde la parte superior
+    left: 0,
+    right: 0,
+    child: Container(
+      color: const Color.fromARGB(208, 5, 189, 103),
+      // decoration: BoxDecoration(border: Border.all()),
+      width: MediaQuery.of(context).size.width,
+      height: 200,
+      child: const Column(
+        children: [
+          Text(
+            'Nombre de Usuario',
+            textAlign: TextAlign.right,
+          ),
+          Text('Correo'),
+        ],
+      ),
+    ),
+  );
+}
