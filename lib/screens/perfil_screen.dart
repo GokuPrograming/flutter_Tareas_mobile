@@ -3,7 +3,7 @@ import 'package:easy_url_launcher/easy_url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:tareas_flutter/functions/AbrirLinks.dart';
 import 'package:tareas_flutter/functions/seleccionarImagen.dart';
-
+import 'package:full_screen_image/full_screen_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart'; //para las imagenes
@@ -19,6 +19,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
 //variables locales de entorno a modificar
   var nombreUsuario = 'Miguel Vera Franco';
   var correo = 'ronbot1223@gmail.com';
+  Uri correoUri = Uri.parse('ronbot1223@gmail.com');
   var numeroTel = '4111549487';
   // ignore: non_constant_identifier_names
   Uri Github = Uri.parse('https://github.com/GokuPrograming');
@@ -49,24 +50,22 @@ class _PerfilScreenState extends State<PerfilScreen> {
           //boton de ajustesPosrtada
           Positioned(
             top: MediaQuery.of(context).size.height *
-                0.115, // Ajusta la distancia desde la parte superior
+                0.15, // Ajusta la distancia desde la parte superior
             left: MediaQuery.of(context).size.width *
-                0.70, // Ajusta la distancia desde el borde izquierdo
-            child: Center(
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.fromLTRB(5, 5, 5, 15),
-                width: MediaQuery.of(context).size.width * 0.25,
-                height: MediaQuery.of(context).size.width * 0.1,
-                margin: EdgeInsetsDirectional.fromSTEB(5, 22, 20, 5),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(100),
-                  ),
-                  color: Colors.black12,
+                0.80, // Ajusta la distancia desde el borde izquierdo
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.fromLTRB(5, 5, 5, 15),
+              width: MediaQuery.of(context).size.width * 0.115,
+              height: MediaQuery.of(context).size.width * 0.1,
+              // margin: const EdgeInsetsDirectional.fromSTEB(5, 22, 20, 5),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100),
                 ),
-                child: cambiarImagenCamaraGaleria(context),
+                color: Color.fromARGB(255, 227, 187, 201),
               ),
+              child: cambiarImagenCamaraGaleria(context),
             ),
           ),
 
@@ -89,8 +88,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       return Wrap(
                         children: [
                           ListTile(
-                            leading: Icon(Icons.camera_alt),
-                            title: Text('Cámara'),
+                            leading: const Icon(Icons.camera_alt),
+                            title: const Text('Cámara'),
                             onTap: () async {
                               try {
                                 await selector.pickImage(ImageSource.camera);
@@ -120,8 +119,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
                             },
                           ),
                           ListTile(
-                            leading: Icon(Icons.photo),
-                            title: Text('Galeria'),
+                            leading: const Icon(Icons.photo),
+                            title: const Text('Galeria'),
                             onTap: () async {
                               try {
                                 await selector.pickImage(ImageSource.gallery);
@@ -209,8 +208,13 @@ class _PerfilScreenState extends State<PerfilScreen> {
                     children: [
                       Container(
                         child: MaterialButton(
-                          onPressed: () {},
-                          child: const Text('Cancion Favorita'),
+                          onPressed: () async {
+                            await EasyLauncher.email(
+                                email: correo,
+                                subject: 'Hola Soy yo',
+                                body: 'Hola Buen dia, quiero decirle que');
+                          },
+                          child: const Text('Mandame Correo'),
                         ),
                       ),
                     ],
@@ -224,68 +228,113 @@ class _PerfilScreenState extends State<PerfilScreen> {
     );
   }
 
-  DropdownButtonHideUnderline cambiarImagenCamaraGaleria(BuildContext context) {
+  cambiarImagenCamaraGaleria(BuildContext context) {
     return DropdownButtonHideUnderline(
-      child: DropdownButton<String>(
-        hint: Icon(Icons.edit),
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.zero,
-        items: [
-          DropdownMenuItem<String>(
-            value: 'Galeria',
-            child: IconButton(
-              icon: const Icon(
+        child: DropdownButton<String>(
+      hint: Icon(Icons.edit),
+      icon: SizedBox.shrink(), // Remueve el triángulo hacia abajo
+      items: const [
+        DropdownMenuItem<String>(
+          value: 'Galeria',
+          child: Row(
+            children: [
+              Icon(
                 Icons.photo,
                 color: Colors.amber,
-                textDirection: TextDirection.ltr,
               ),
-              onPressed: () async {
-                Seleccionarimagen selector = Seleccionarimagen();
-                await selector.pickImage(ImageSource.gallery);
-                setState(() {
-                  image = selector.image;
-                  print('Imagen seleccionada: $image');
-                  DatosUser(
-                    nombreUsuario: nombreUsuario,
-                    correo: correo,
-                    image: image,
-                    imagePerfil: imagePerfil,
-                  );
-                  Navigator.pop(context);
-                });
-              },
-            ),
+              SizedBox(width: 5),
+              Text(''),
+            ],
           ),
-          DropdownMenuItem<String>(
-            value: 'Camara',
-            child: IconButton(
-              icon: const Icon(
+        ),
+        DropdownMenuItem<String>(
+          value: 'Camara',
+          child: Row(
+            children: [
+              Icon(
                 Icons.camera_alt,
                 color: Colors.amber,
               ),
-              onPressed: () async {
-                Seleccionarimagen selector = Seleccionarimagen();
-                await selector.pickImage(ImageSource.camera);
-                setState(() {
-                  image = selector.image;
-                  print('Imagen seleccionada: $image');
-                  DatosUser(
-                    nombreUsuario: nombreUsuario,
-                    correo: correo,
-                    image: image,
-                    imagePerfil: imagePerfil,
-                  );
-                  Navigator.pop(context);
-                });
-              },
-            ),
+              SizedBox(width: 5),
+              Text(''),
+            ],
           ),
-        ],
-        onChanged: (value) {
-          // Aquí puedes manejar el cambio de selección si es necesario
-        },
-      ),
-    );
+        ),
+        DropdownMenuItem<String>(
+          value: 'Full',
+          child: Row(
+            children: [
+              Icon(
+                Icons.fullscreen,
+                color: Colors.amber,
+              ),
+              SizedBox(width: 5),
+              Text(''),
+            ],
+          ),
+        ),
+      ],
+      onChanged: (value) async {
+        if (value == 'Galeria') {
+          Seleccionarimagen selector = Seleccionarimagen();
+          await selector.pickImage(ImageSource.gallery);
+          setState(() {
+            image = selector.image;
+            print('Imagen seleccionada: $image');
+            DatosUser(
+              nombreUsuario: nombreUsuario,
+              correo: correo,
+              image: image,
+              imagePerfil: imagePerfil,
+            );
+          });
+        } else if (value == 'Camara') {
+          Seleccionarimagen selector = Seleccionarimagen();
+          await selector.pickImage(ImageSource.camera);
+          setState(() {
+            image = selector.image;
+            print('Imagen seleccionada: $image');
+            DatosUser(
+              nombreUsuario: nombreUsuario,
+              correo: correo,
+              image: image,
+              imagePerfil: imagePerfil,
+            );
+          });
+        } else if (value == 'Full') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FullScreenWidget(
+                disposeLevel: DisposeLevel.Low,
+                child: Center(
+                  child: Hero(
+                    tag: "smallImage",
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: image != null
+                              ? DecorationImage(
+                                  image: FileImage(image!),
+                                  fit: BoxFit.contain,
+                                )
+                              : const DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/portadaPic.jpg'),
+                                  fit: BoxFit.contain,
+                                ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+      },
+    ));
   }
 }
 
@@ -325,7 +374,7 @@ class DatosUser extends StatelessWidget {
 
               ///decoracion de la imagen de fondo portada
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(),
+                borderRadius: const BorderRadius.only(),
                 color: Colors.blue,
                 image: image != null
                     ? DecorationImage(
@@ -342,7 +391,7 @@ class DatosUser extends StatelessWidget {
               // },
 
               //inicio de sesion para otra cuenta
-              otherAccountsPictures: const [CuentaSecundariaPerfil()],
+              // otherAccountsPictures: const [CuentaSecundariaPerfil()],
               //cuenta del perfil actual
               currentAccountPicture: Container(
                 decoration: BoxDecoration(
@@ -360,14 +409,40 @@ class DatosUser extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FullScreenImage(
-                            imageUrl:
-                                'https://scontent.fcyw4-1.fna.fbcdn.net/v/t39.30808-6/404114617_3126579974315474_2568976200736145599_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGqmQr36p62BW9TNA_C_iaDVAkyeOs37JhUCTJ46zfsmMca3dnxXUMTlcqRHR6lj4VP4hBc0JXXiXuA-0zYGnvT&_nc_ohc=YUeuzBmGtcoQ7kNvgFQosbz&_nc_ht=scontent.fcyw4-1.fna&_nc_gid=AdRDI96fte2WUwEEtXsIQCx&oh=00_AYApbV2PVaByWlaxSBN9-A6nioKZQNsk2PL6VfWv8nEVlA&oe=66E00E51',
-                          ),
-                        ),
-                      );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FullScreenWidget(
+                              disposeLevel: DisposeLevel.High,
+                              child: Center(
+                                child: Hero(
+                                    tag: "smallImage",
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: const Border.symmetric(),
+                                          image: imagePerfil != null
+                                              ? DecorationImage(
+                                                  image:
+                                                      FileImage(imagePerfil!),
+                                                  fit: BoxFit.contain,
+                                                )
+                                              : const DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/images/perfil_pic.jpg'), // Tu imagen aquí
+                                                  fit: BoxFit.contain,
+                                                ),
+                                        ),
+                                      ),
+                                    )
+                                    // child: Image.asset(
+                                    //   "assets/images/perfil_pic.jpg",
+                                    //   fit: BoxFit.cover,
+                                    // ),
+                                    ),
+                              ),
+                            ),
+                          ));
                     },
 
                     ///imagen de perfil
@@ -481,24 +556,5 @@ class NombreUserAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(nombreUsuario);
-  }
-}
-
-class FullScreenImage extends StatelessWidget {
-  final String imageUrl;
-  FullScreenImage({required this.imageUrl});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Imagen Completa'),
-      //   backgroundColor: Colors.black,
-      // ),
-      body: Center(
-        child: Image.network(imageUrl),
-      ),
-      backgroundColor: Colors.black,
-    );
   }
 }
