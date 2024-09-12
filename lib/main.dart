@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
         home: const Menuapp(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData.dark(),
+        
 ////el ruteo de las screens
         // initialRoute: AppRoutes.home, // Ruta inicial
         routes: AppRoutes.routes, // Usa las rutas definidas

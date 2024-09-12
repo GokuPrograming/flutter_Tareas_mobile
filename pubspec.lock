@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  backdrop_modal_route:
+    dependency: "direct main"
+    description:
+      name: backdrop_modal_route
+      sha256: "46d14e9b5499e840bec5ecea44611a6bc16630c12d91515d75f4c54859dfa482"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.4"
   boolean_selector:
     dependency: transitive
     description:

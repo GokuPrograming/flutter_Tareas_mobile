@@ -7,6 +7,7 @@ import 'package:full_screen_image/full_screen_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart'; //para las imagenes
+import 'package:backdrop_modal_route/backdrop_modal_route.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({super.key});
@@ -24,6 +25,24 @@ class _PerfilScreenState extends State<PerfilScreen> {
   // ignore: non_constant_identifier_names
   Uri Github = Uri.parse('https://github.com/GokuPrograming');
 
+  // Creamos un controlador para el TextField
+  late TextEditingController _controllerCorreo;
+  late TextEditingController _controllerName;
+  late TextEditingController _controllerGitHub;
+  late TextEditingController _controllerTelNumber;
+  Widget _currentWidget =
+      Container(); // Inicia vacío o con un widget por defecto
+
+  @override
+  void initState() {
+    super.initState();
+    // Inicializamos el controlador con forme carga'
+    _controllerCorreo = TextEditingController(text: correo);
+    _controllerGitHub = TextEditingController(text: Github.toString());
+    _controllerName = TextEditingController(text: nombreUsuario);
+    _controllerTelNumber = TextEditingController(text: numeroTel);
+  }
+
   ///acciones logica Code
   //abrir la galeria
   File? image, imagePerfil;
@@ -36,7 +55,96 @@ class _PerfilScreenState extends State<PerfilScreen> {
         centerTitle: false, // Centra el título
         title: NombreUserAppBar(nombreUsuario: nombreUsuario),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
+          IconButton(
+              onPressed: () {
+                // with inline widget
+                Navigator.push(
+                  context,
+                  BackdropModalRoute<void>(
+                    backgroundColor: Color.fromARGB(255, 0, 0, 0),
+                    overlayContentBuilder: (context) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height - 100.0,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Infomracion personal'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                controller: _controllerCorreo,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'ingresa correo',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                controller: _controllerName,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'ingresa nombre',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                controller: _controllerGitHub,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'ingresa Link De Perfil GitHub',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                controller: _controllerTelNumber,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Numero de Telefono',
+                                ),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      correo = _controllerCorreo.text;
+                                      nombreUsuario = _controllerName.text;
+                                      Github =
+                                          Uri.parse(_controllerGitHub.text);
+                                      numeroTel = _controllerTelNumber.text;
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Guardar Cambios'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Cancelar'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+              icon: const Icon(Icons.settings))
         ],
       ),
       body: Stack(
@@ -165,6 +273,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
             top: MediaQuery.of(context).size.height * .20,
             child: Container(
               width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
               padding: const EdgeInsets.all(10),
               decoration: const BoxDecoration(
                 color: Colors.black,
@@ -175,16 +284,18 @@ class _PerfilScreenState extends State<PerfilScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       MaterialButton(
+                        elevation: 25.8,
+                        color: Color.fromARGB(128, 236, 134, 134),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              20.0), // Define el radio del borde
+                        ),
                         // color: Colors.green,
                         onPressed: () async {
                           await EasyLauncher.call(number: numeroTel);
                         },
-                        child: const Text("Call Me"),
+                        child: const Text("📞 LLAMAME"),
                       ),
-                      MaterialButton(
-                        onPressed: () {},
-                        child: const Icon(Icons.edit),
-                      )
                     ],
                   ),
                   Row(
@@ -193,12 +304,17 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       Container(
                         color: Colors.black,
                         child: MaterialButton(
+                          color: Color.fromARGB(154, 226, 136, 136),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                20.0), // Define el radio del borde
+                          ),
                           onPressed: () {
                             //mandar el link a funcionar al otro archivo
                             Abrirlinks abrirlinks = Abrirlinks(Github);
                             abrirlinks.cargarLink();
                           },
-                          child: const Text('Github_class'),
+                          child: const Text('🌚GitHub😁'),
                         ),
                       ),
                     ],
@@ -208,19 +324,71 @@ class _PerfilScreenState extends State<PerfilScreen> {
                     children: [
                       Container(
                         child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                20.0), // Define el radio del borde
+                          ),
+                          color: Color.fromARGB(123, 123, 2, 3),
                           onPressed: () async {
                             await EasyLauncher.email(
                                 email: correo,
                                 subject: 'Hola Soy yo',
                                 body: 'Hola Buen dia, quiero decirle que');
                           },
-                          child: const Text('Mandame Correo'),
+                          child: const Text('Mandame Correo 😊👌'),
                         ),
                       ),
                     ],
                   ),
                 ],
               ),
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.42,
+            height: MediaQuery.of(context).size.height *
+                0.07, // Ajusta la altura proporcionalmente
+            left: MediaQuery.of(context).size.width *
+                0.05, // Márgenes proporcionados
+            right: MediaQuery.of(context).size.width * 0.05,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * 0.02,
+                      horizontal: MediaQuery.of(context).size.width * 0.03),
+                  child: IconButton(
+                    icon: Icon(Icons.home,
+                        size: MediaQuery.of(context).size.width * 0.08),
+                    onPressed: () {},
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * 0.02,
+                      horizontal: MediaQuery.of(context).size.width * 0.03),
+                  child: IconButton(
+                    icon: Icon(Icons.picture_in_picture,
+                        size: MediaQuery.of(context).size.width * 0.08),
+                    onPressed: () {
+                      // Manejar la acción de notificaciones
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * 0.02,
+                      horizontal: MediaQuery.of(context).size.width * 0.03),
+                  child: IconButton(
+                    icon: Icon(Icons.document_scanner,
+                        size: MediaQuery.of(context).size.width * 0.08),
+                    onPressed: () {
+                      // Manejar la acción del perfil
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -366,7 +534,7 @@ class DatosUser extends StatelessWidget {
                   borderRadius: BorderRadius.all(
                     Radius.circular(40),
                   ),
-                  color: Color.fromARGB(244, 223, 247, 245),
+                  color: Color.fromARGB(135, 159, 240, 233),
                 ),
                 child: NombreUserPerfilPhoto(nombreUsuario: nombreUsuario),
               ),
@@ -518,7 +686,12 @@ class correoUserPerfil extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(correo);
+    return Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(100)),
+          color: Color.fromARGB(231, 96, 27, 27),
+        ),
+        child: Text(correo));
   }
 }
 
