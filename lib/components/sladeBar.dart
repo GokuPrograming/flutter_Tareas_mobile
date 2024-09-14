@@ -19,8 +19,7 @@ class SladeBar extends StatelessWidget {
           itemTextPadding: EdgeInsets.only(left: 30),
           selectedItemTextPadding: EdgeInsets.only(left: 30),
           itemDecoration: BoxDecoration(
-              // color: Color.fromARGB(80, 176, 176, 216),
-              // border: Border(bottom: BorderSide.none),
+              
               ),
           selectedItemDecoration: BoxDecoration(
             color: Color.fromARGB(83, 164, 164, 238),
@@ -49,6 +48,12 @@ class SladeBar extends StatelessWidget {
               label: 'starbucks',
               onTap: () {
                 Navigator.pushNamed(context, '/starbuckScreen');
+              }),
+               SidebarXItem(
+              icon: Icons.local_pizza,
+              label: 'Pizza',
+              onTap: () {
+                Navigator.pushNamed(context, '/pizza');
               }),
         ],
       ),
