@@ -42,7 +42,7 @@ dependencies:
   easy_url_launcher: ^0.0.7
   full_screen_image: ^2.0.0
   backdrop_modal_route: ^2.0.4
-
+  sidebarx: ^0.17.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
