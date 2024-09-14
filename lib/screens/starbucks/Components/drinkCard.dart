@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tareas_flutter/screens/starbucks/config/colors.dart';
 import 'package:tareas_flutter/screens/starbucks/config/drink.dart';
 
-class Drinkcard extends StatelessWidget {
+class Drinkcard extends StatefulWidget {
   final Drink drink;
   final double pageOffset;
   final int index;
@@ -11,34 +11,86 @@ class Drinkcard extends StatelessWidget {
       {super.key, required this.drink});
 
   @override
+  _DrinkcardState createState() => _DrinkcardState();
+}
+
+class _DrinkcardState extends State<Drinkcard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Inicializa el controlador de animación
+    _controller = AnimationController(
+      duration: const Duration(seconds: 5),
+      vsync: this,
+    );
+
+    // Configura la animación
+    _animation = Tween<double>(begin: 0, end: 100).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.bounceInOut,
+    ));
+
+    // Inicia la animación
+    _controller.forward();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final double cardWidth =
-        size.width - 60; // Ajusta el tamaño del cardWidth si es necesario
+    final double cardWidth = size.width - 60;
     final double cardHeight = size.height * .50;
-
-    // Calcula el valor de animación basado en el pageOffset
-    final double animation = Curves.easeInOut.transform(pageOffset % 1);
 
     return Container(
       alignment: Alignment.center,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          buildBackgroundImage(cardWidth, cardHeight, size, drink: drink),
-          buildAboveCard(cardWidth, cardHeight, drink: drink, size: size),
-          buildCupImage(
-            size: size,
-            drink: drink,
-            cardWidth,
+          buildBackgroundImage(cardWidth, cardHeight, size,
+              drink: widget.drink),
+          buildAboveCard(cardWidth, cardHeight,
+              drink: widget.drink, size: size),
+          buildCupImage(size: size, drink: widget.drink, cardHeight),
+          buildBlurImage(cardWidth, cardHeight,
+              drink: widget.drink, size: size),
+          AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return buildSmallImage(
+                cardWidth,
+                cardHeight,
+                drink: widget.drink,
+                size: size,
+                animationValue: _animation.value,
+              );
+            },
           ),
-          buildBlurImage(cardWidth, cardHeight, drink: drink, size: size),
-          buildSmallImage(cardWidth, cardHeight, drink: drink, size: size),
-          buildTopImage(cardWidth, cardHeight, drink: drink, size: size),
-          BuildTopText(drink: drink),
+          AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return buildTopImage(
+                cardWidth,
+                cardHeight,
+                drink: widget.drink,
+                size: size,
+                animationValue: _animation.value,
+              );
+            },
+          ),
+          BuildTopText(drink: widget.drink),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 
@@ -47,6 +99,7 @@ class buildTopImage extends StatelessWidget {
   final double cardHeight;
   final Drink drink;
   final Size size;
+  final double animationValue;
 
   const buildTopImage(
     this.cardWidth,
@@ -54,13 +107,14 @@ class buildTopImage extends StatelessWidget {
     super.key,
     required this.drink,
     required this.size,
+    required this.animationValue,
   });
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      left: cardWidth * 0.05,
-      bottom: cardHeight * 0.9, // Ajusta esta posición según tu diseño
+      left: (cardWidth * .05) + animationValue,
+      bottom: cardHeight * 0.9,
       child: Image.asset(drink.imageTop.toString()),
     );
   }
@@ -71,6 +125,7 @@ class buildSmallImage extends StatelessWidget {
   final double cardHeight;
   final Drink drink;
   final Size size;
+  final double animationValue;
 
   const buildSmallImage(
     this.cardWidth,
@@ -78,13 +133,14 @@ class buildSmallImage extends StatelessWidget {
     super.key,
     required this.drink,
     required this.size,
+    required this.animationValue,
   });
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: cardWidth * .6,
-      top: cardHeight * 0.3, // Ajusta esta posición según tu diseño
+      right: (cardWidth * .1) + animationValue,
+      top: cardHeight * 0.2,
       child: Image.asset(drink.imageSmall.toString()),
     );
   }
@@ -108,7 +164,7 @@ class buildBlurImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: cardWidth * 0.5 - 60,
-      bottom: cardHeight * 0.1, // Ajusta esta posición según tu diseño
+      bottom: cardHeight * 0.1,
       child: Image.asset(drink.imageBlur.toString()),
     );
   }
@@ -118,6 +174,7 @@ class buildCupImage extends StatelessWidget {
   final Drink drink;
   final Size size;
   final cardHeight;
+
   const buildCupImage(
     this.cardHeight, {
     super.key,
@@ -128,7 +185,7 @@ class buildCupImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: cardHeight * 0.45, // Ajusta esta posición según tu diseño
+      bottom: cardHeight * 0.45,
       right: -size.width * .2 / 2 + 50,
       child: Image.asset(
         drink.cupImage.toString(),
