@@ -141,9 +141,11 @@ class buildTopImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      left: (cardWidth * .05) + animationValue,
-      bottom: cardHeight * 0.9,
-      child: Image.asset(drink.imageTop.toString()),
+      left: (cardWidth * .0001) + animationValue + 100,
+      bottom: cardHeight * 0.80,
+      width: 100,
+      child: Transform.rotate(
+          angle: -.2, child: Image.asset(drink.imageTop.toString())),
     );
   }
 }
@@ -167,9 +169,15 @@ class buildSmallImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: (cardWidth * .1) + animationValue,
-      top: cardHeight * 0.2,
-      child: Image.asset(drink.imageSmall.toString()),
+      width: 80,
+      right: (cardWidth * .044) + animationValue - 120,
+      top: cardHeight * 0.0009,
+      child: Transform.rotate(
+        angle: 0.45,
+        child: Image.asset(
+          drink.imageSmall.toString(),
+        ),
+      ),
     );
   }
 }
@@ -193,9 +201,9 @@ class buildBlurImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      width: cardHeight * .3,
-      right: cardWidth * 0.45,
-      height: cardHeight * 0.55 + animationValue,
+      width: cardHeight * .25,
+      left: cardWidth * 0.05,
+      height: cardHeight * 0.30 + animationValue,
       child: Image.asset(drink.imageBlur.toString()),
     );
   }
@@ -231,7 +239,7 @@ class buildCupImage extends StatelessWidget {
               left: MediaQuery.of(context).size.width * .25,
               bottom: 0,
               right: MediaQuery.of(context).size.width * .25,
-              child: Precios(),
+              child: Transform.rotate(angle: .4, child: Precios()),
             ),
             Positioned(
               left: MediaQuery.of(context).size.width * .09,
@@ -282,7 +290,7 @@ class buildAboveCard extends StatelessWidget {
               style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.normal,
-                  color: Colors.white),
+                  color: Color.fromARGB(255, 28, 1, 1)),
             ),
             const Spacer(),
           ],
@@ -440,16 +448,24 @@ class BuildTopText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 20,
-      left: 20,
+      top: MediaQuery.of(context).size.height * .1 / 11111111,
+      left: MediaQuery.of(context).size.width * .08,
       child: Row(
         children: [
-          Text(
-            drink.name.toString(),
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 50,
-                color: const Color.fromARGB(214, 229, 126, 47)),
+          Container(
+            height: MediaQuery.of(context).size.height * .09,
+            width: MediaQuery.of(context).size.width * .40,
+            decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 94, 69, 54),
+                borderRadius:
+                    BorderRadius.only(bottomRight: Radius.circular(100))),
+            child: Text(
+              drink.name.toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 50,
+                  color: const Color.fromARGB(213, 246, 4, 4)),
+            ),
           ),
           // Text(
           //   drink.conName.toString(),

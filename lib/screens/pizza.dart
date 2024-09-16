@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tareas_flutter/components/pizza/witgets/drinkCard.dart';
+import 'package:tareas_flutter/components/sladeBar.dart';
+import 'package:tareas_flutter/functions/AbrirLinks.dart';
 import 'package:tareas_flutter/screens/starbucks/config/colors.dart';
 import 'package:tareas_flutter/components/pizza/config/drink.dart';
 
@@ -27,12 +29,47 @@ class _StarbucksScreenState extends State<Pizza> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    Uri Ubicacion = Uri.parse('https://maps.app.goo.gl/JMwoVW4ih31gK8Gj7');
+    Uri Page = Uri.parse('https://www.facebook.com/share/p/YDy28NFcVmaGShaZ/');
 
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0), // Altura de la AppBar
+        child: Stack(
+          children: [
+            AppBar(
+              backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Uri Ubicacion =
+                        Uri.parse('https://maps.app.goo.gl/JMwoVW4ih31gK8Gj7');
+                    Abrirlinks abrirlinks = Abrirlinks(Ubicacion);
+                    abrirlinks.cargarLink();
+                  },
+                  icon: Icon(Icons.place),
+                  iconSize: 30,
+                ),
+              ],
+            ),
+            Center(
+              child: IconButton(
+                onPressed: () {
+                  Abrirlinks abrirlinks = Abrirlinks(Page);
+                  abrirlinks.cargarLink();
+                },
+                icon: Image.asset('assets/images/pizza/logo.png',
+                    width: MediaQuery.of(context).size.width * .2),
+              ),
+            ),
+          ],
+        ),
+      ),
+      drawer: SladeBar(),
       body: Stack(
         children: [
-          BuildToolbar(),
-          BuildLogo(size: size),
+          // BuildToolbar(),
+          // BuildLogo(size: size),
           Padding(
             padding: const EdgeInsets.only(top: 60),
             child: BuildPager(
@@ -55,8 +92,8 @@ class _StarbucksScreenState extends State<Pizza> {
       'Pizza',
       'Peperoni',
       'assets/images/pizza/blur_restaurant.jfif',
-      'assets/images/bean_top.png',
-      'assets/images/bean_small.png',
+      'assets/images/pizza/R.png',
+      'assets/images/pizza/pizza (2).png',
       image_top,
       'assets/images/pizza/peperoni_imageGrande.png',
       'Pizza de pepperoni, con mucho queso,hecha con mucho cariño, mucho amor por nuestr cocinero estrella ',
@@ -65,25 +102,25 @@ class _StarbucksScreenState extends State<Pizza> {
     ));
     list.add(Drink(
       'Pizza',
-      'Peperoni',
+      'Gourmet',
       'assets/images/pizza/blur_restaurant.jfif',
-      'assets/images/bean_top.png',
-      'assets/images/bean_small.png',
+      'assets/images/pizza/R.png',
+      'assets/images/pizza/fire.png',
       image_top,
       'assets/images/pizza/gurmet.png',
-      'Pizza de pepperoni, con mucho queso,hecha con mucho cariño, mucho amor por nuestr cocinero estrella ',
+      'Pizza para personas con altas espectativas y poco presupuesto ',
       color1,
       color2,
     ));
     list.add(Drink(
       'Pizza',
-      'Peperoni',
+      'Queso',
       'assets/images/pizza/blur_restaurant.jfif',
-      'assets/images/bean_top.png',
-      'assets/images/bean_small.png',
+      'assets/images/pizza/R.png',
+      'assets/images/pizza/cheese.png',
       image_top,
       'assets/images/pizza/queso.png',
-      'Pizza de pepperoni, con mucho queso,hecha con mucho cariño, mucho amor por nuestr cocinero estrella ',
+      'Pizza de queso, y ya, solo tiene queso,¿que esperabas?, ¿carne? ',
       color1,
       color2,
     ));
@@ -91,11 +128,11 @@ class _StarbucksScreenState extends State<Pizza> {
       'Pizza',
       'Peperoni',
       'assets/images/pizza/blur_restaurant.jfif',
-      'assets/images/bean_top.png',
-      'assets/images/bean_small.png',
+      'assets/images/pizza/R.png',
+      'assets/images/pizza/chili-removebg-preview.png',
       image_top,
       'assets/images/pizza/peperoni_imageGrande.png',
-      'Pizza de pepperoni, con mucho queso,hecha con mucho cariño, mucho amor por nuestr cocinero estrella ',
+      'Pizza de pepperoni, igual que la otra pero con chile XD ',
       color1,
       color2,
     ));
@@ -139,11 +176,18 @@ class BuildLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Uri Page = Uri.parse('https://www.facebook.com/share/p/YDy28NFcVmaGShaZ/');
     return Positioned(
       top: 10,
       right: size.width / 2.7,
-      child: Image.asset('assets/images/pizza/logo.png',
-          width: MediaQuery.of(context).size.width * .2),
+      child: IconButton(
+        onPressed: () {
+          Abrirlinks abrirlinks = Abrirlinks(Page);
+          abrirlinks.cargarLink();
+        },
+        icon: Image.asset('assets/images/pizza/logo.png',
+            width: MediaQuery.of(context).size.width * .2),
+      ),
     );
   }
 }
@@ -168,9 +212,15 @@ class BuildToolbar extends StatelessWidget {
             ),
           ),
           Spacer(),
-          Icon(
-            Icons.place,
-            size: 30,
+          IconButton(
+            onPressed: () {
+              Uri Ubicacion =
+                  Uri.parse('https://maps.app.goo.gl/JMwoVW4ih31gK8Gj7');
+              Abrirlinks abrirlinks = Abrirlinks(Ubicacion);
+              abrirlinks.cargarLink();
+            },
+            icon: Icon(Icons.place),
+            iconSize: 30,
           ),
           SizedBox(
             width: 30,
